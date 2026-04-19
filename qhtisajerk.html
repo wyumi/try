@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>qth是混蛋</title>
+  <style>
+    body {
+      background: #ffe6f0;
+      padding: 50px 20px;
+      font-family: Arial;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' text-anchor='middle' dominant-baseline='middle' fill='rgba(0,0,0,0.1)' font-size='24'%3E%3Ctext x='60' y='60' transform='rotate(45 60 60)'%3E qht is a jerk %3C/text%3E%3C/svg%3E");
+      background-repeat: repeat; /* 保持密集平铺 */
+    }
+
+    .box {
+      background: white;
+      padding: 50px;
+      border-radius: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #ff6b9d;
+    }
+
+    .domain {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 18px;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 40px; /* 相册和事件区间距 */
+    }
+
+    .photo-grid img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* 事件区样式 */
+    .event-section {
+      text-align: left;
+      margin: 40px 0;
+      padding-top: 20px;
+      border-top: 1px solid #f8d7e2;
+    }
+
+    .event-title {
+      color: #ff6b9d;
+      font-size: 20px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .event-input {
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      border: 1px solid #f8d7e2;
+      border-radius: 10px;
+      font-family: Arial;
+      font-size: 16px;
+      resize: vertical;
+      outline: none;
+      margin-bottom: 15px; /* 输入框和按钮间距 */
+    }
+
+    .event-input:focus {
+      border-color: #ff6b9d;
+      box-shadow: 0 0 8px rgba(255, 107, 157, 0.1);
+    }
+
+    .event-save-btn {
+      width: 120px;
+      height: 45px;
+      background-color: #ff6b9d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .event-save-btn:hover {
+      background-color: #ff5588;
+    }
+
+    .event-tip {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #999;
+    }
+
+    /* 评论区样式 */
+    .comment-section {
+      text-align: left;
+      padding-top: 20px;
+      border-top: 1px solid #f8d7e2;
+    }
+
+    .comment-title {
+      color: #ff6b9d;
+      font-size: 20px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .comment-name-input {
+      height: 45px;
+      padding: 0 15px;
+      border: 1px solid #f8d7e2;
+      border-radius: 8px;
+      font-family: Arial;
+      font-size: 16px;
+      outline: none;
+      width: 300px;
+    }
+
+    .comment-content-input {
+      height: 100px;
+      padding: 15px;
+      border: 1px solid #f8d7e2;
+      border-radius: 8px;
+      font-family: Arial;
+      font-size: 16px;
+      resize: vertical;
+      outline: none;
+    }
+
+    .comment-name-input:focus, .comment-content-input:focus {
+      border-color: #ff6b9d;
+      box-shadow: 0 0 8px rgba(255, 107, 157, 0.1);
+    }
+
+    .comment-submit-btn {
+      width: 120px;
+      height: 45px;
+      background-color: #ff6b9d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .comment-submit-btn:hover {
+      background-color: #ff5588;
+    }
+
+    .comment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .single-comment {
+      padding: 15px;
+      border: 1px solid #f8d7e2;
+      border-radius: 10px;
+      background-color: #fff8fa;
+    }
+
+    .comment-name {
+      font-weight: bold;
+      color: #ff6b9d;
+      margin-bottom: 8px;
+    }
+
+    .comment-content {
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .comment-time {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .comment-empty-tip {
+      color: #999;
+      font-size: 16px;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    /* 弹窗样式 */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 9999;
+    }
+
+    .popup img {
+      max-width: 90%;
+      max-height: 90%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h1>qht是大混蛋</h1>
+    <p class="domain">www.qht是混蛋.com</p>
+
+    <!-- 相册区 -->
+    <div class="photo-grid">
+      <img src="1.jpg" onclick="show(this.src)">
+      <img src="2.jpg" onclick="show(this.src)">
+      <img src="3.jpg" onclick="show(this.src)">
+      <img src="4.jpg" onclick="show(this.src)">
+      <img src="5.jpg" onclick="show(this.src)">
+      <img src="6.jpg" onclick="show(this.src)">
+      <img src="7.jpg" onclick="show(this.src)">
+      <img src="8.jpg" onclick="show(this.src)">
+      <img src="9.jpg" onclick="show(this.src)">
+      <img src="10.jpg" onclick="show(this.src)">
+      <img src="11.jpg" onclick="show(this.src)">
+      <img src="12.jpg" onclick="show(this.src)">
+      <img src="13.jpg" onclick="show(this.src)">
+      <img src="14.jpg" onclick="show(this.src)">
+      <img src="15.jpg" onclick="show(this.src)">
+    </div>
+
+    <!-- 事件区 -->
+    <div class="event-section">
+      <h3 class="event-title">📝 事件区</h3>
+      <textarea class="event-input" id="eventContent" placeholder="在这里记录相关事件、吐槽或想说的话..."></textarea>
+      <button class="event-save-btn" onclick="saveEvent()">保存事件</button>
+      <p class="event-tip">💡 点击「保存事件」后内容才会保存，刷新网页不会丢失～</p>
+    </div>
+
+    <!-- 评论区 -->
+    <div class="comment-section">
+      <h3 class="comment-title">💬 评论区</h3>
+      <div class="comment-form">
+        <input type="text" class="comment-name-input" id="commentName" placeholder="你的昵称">
+        <textarea class="comment-content-input" id="commentContent" placeholder="写下你的评论..."></textarea>
+        <button class="comment-submit-btn" onclick="submitComment()">提交评论</button>
+      </div>
+      <div class="comment-list" id="commentList"></div>
+    </div>
+  </div>
+
+  <!-- 图片弹窗 -->
+  <div id="popup" class="popup" onclick="closePopup()">
+    <img id="fullImage">
+  </div>
+
+  <script>
+    // 图片弹窗功能
+    function show(src) {
+      document.getElementById("fullImage").src = src;
+      document.getElementById("popup").style.display = "block";
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    // 事件区功能
+    const eventInput = document.getElementById('eventContent');
+    window.onload = function() {
+      // 加载事件
+      const savedEvent = localStorage.getItem('qhtEvent');
+      if (savedEvent) {
+        eventInput.value = savedEvent;
+      }
+      // 加载评论
+      loadComments();
+    };
+
+    function saveEvent() {
+      const eventContent = eventInput.value.trim();
+      if (!eventContent) {
+        alert('事件内容不能为空哦～');
+        return;
+      }
+      localStorage.setItem('qhtEvent', eventContent);
+      alert('事件保存成功！');
+    }
+
+    // 👇 核心新增：违禁词配置（你可以自由修改/添加/删除）
+    const forbiddenWords = [
+      'wym',  '王逸敏', 'wangyimin','wangym','wyimin','wangymin','wangyim'
+    ];
+
+    // 👇 核心新增：违禁词检测函数
+    function checkForbiddenWords(content) {
+      // 转小写，避免大小写漏检（比如“混蛋”和“混蛋”都能检测）
+      const lowerContent = content.toLowerCase();
+      // 遍历违禁词列表，检测是否包含
+      for (let word of forbiddenWords) {
+        if (lowerContent.includes(word.toLowerCase())) {
+          return {
+            hasForbidden: true,
+            word: word // 返回检测到的违禁词
+          };
+        }
+      }
+      return { hasForbidden: false };
+    }
+
+    // 评论区功能（修改：加入违禁词检测）
+    function submitComment() {
+      const name = document.getElementById('commentName').value.trim();
+      const content = document.getElementById('commentContent').value.trim();
+
+      // 1. 基础校验
+      if (!name) {
+        alert('请输入你的昵称～');
+        return;
+      }
+      if (!content) {
+        alert('请输入评论内容～');
+        return;
+      }
+
+      // 2. 违禁词检测
+      const forbiddenCheck = checkForbiddenWords(content);
+      if (forbiddenCheck.hasForbidden) {
+        // 弹窗警告，禁止提交
+        alert(`⚠️⚠️⚠️⚠️${name}！！ 评论中包含违禁词【${forbiddenCheck.word}】，禁止发布！请修改后重新提交。`);
+        // 清空评论内容输入框（可选，也可以保留让用户修改）
+        document.getElementById('commentContent').value = '';
+        return; // 终止提交流程
+      }
+
+      // 3. 检测通过，正常提交评论
+      const comment = {
+        name: name,
+        content: content,
+        time: new Date().toLocaleString()
+      };
+
+      let comments = JSON.parse(localStorage.getItem('qhtComments')) || [];
+      comments.unshift(comment);
+      localStorage.setItem('qhtComments', JSON.stringify(comments));
+
+      // 清空输入框
+      document.getElementById('commentName').value = '';
+      document.getElementById('commentContent').value = '';
+
+      // 重新加载评论
+      loadComments();
+    }
+
+    function loadComments() {
+      const commentList = document.getElementById('commentList');
+      const comments = JSON.parse(localStorage.getItem('qhtComments')) || [];
+
+      if (comments.length === 0) {
+        commentList.innerHTML = '<div class="comment-empty-tip">还没有评论，快来留下第一条吧～</div>';
+        return;
+      }
+
+      let html = '';
+      comments.forEach(item => {
+        html += `
+          <div class="single-comment">
+            <div class="comment-name">${item.name}</div>
+            <div class="comment-content">${item.content}</div>
+            <div class="comment-time">${item.time}</div>
+          </div>
+        `;
+      });
+      commentList.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
